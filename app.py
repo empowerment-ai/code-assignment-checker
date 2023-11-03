@@ -49,6 +49,9 @@ if __name__ == '__main__':
     tab0, tab1, tab2, tab3 = st.tabs(["Introduction", "AI Instructions", "Assignment Instructions", "Submission Details"])
     app_intro()
 
+    if 'submit_button_state' not in st.session_state: 
+        st.session_state.disabled = False
+
     openai_api_key_env = os.getenv('OPENAI_API_KEY')
     openai_api_key = st.sidebar.text_input('OpenAI API Key', placeholder='sk-', value=openai_api_key_env)
     url = "https://platform.openai.com/account/api-keys"
@@ -118,9 +121,11 @@ public class HelloWorld {
         with tab3:
             submission = st.text_area("Student Submission:", sample_submission, height=500)
 
-        submitted = st.form_submit_button('Check')
-        if not openai_api_key.startswith('sk-'):
+        if not (openai_api_key or openai_api_key.startswith('sk-')):
             st.warning('Please enter your OpenAI API key!', icon='⚠')
+            st.session_state.disabled = True
+        submitted = st.form_submit_button('Check', disabled=st.session_state.disabled)
+        
         if submitted and openai_api_key.startswith('sk-'):
             with get_openai_callback() as cb:
 
@@ -133,8 +138,6 @@ public class HelloWorld {
                 synopsis_chain = LLMChain(
                     llm=llm, prompt=review_prompt_template, output_key="review"
                 )
-
-
                 review = synopsis_chain.run({'ai': ai_review_instructions, 'instructions': instructions,'submission': submission })
                 print(cb)
                 st.write("Assignment Feedback:")
