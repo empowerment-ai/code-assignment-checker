@@ -121,7 +121,7 @@ public class HelloWorld {
         with tab3:
             submission = st.text_area("Student Submission:", sample_submission, height=500)
 
-        if not (openai_api_key or openai_api_key.startswith('sk-')):
+        if (openai_api_key == None or not openai_api_key.startswith('sk-')):
             st.warning('Please enter your OpenAI API key!', icon='⚠')
             st.session_state.disabled = True
         submitted = st.form_submit_button('Check', disabled=st.session_state.disabled)
