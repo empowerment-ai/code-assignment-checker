@@ -48,6 +48,7 @@ if __name__ == '__main__':
     st.header('🦜🔗 Coding Assignment Checker')
     tab0, tab1, tab2, tab3 = st.tabs(["Introduction", "AI Instructions", "Assignment Instructions", "Submission Details"])
     app_intro()
+    model = st.sidebar.selectbox('Select Model:', ['gpt-3.5-turbo', 'gpt-4'])
 
     if 'submit_button_state' not in st.session_state: 
         st.session_state.disabled = False
@@ -129,7 +130,6 @@ public class HelloWorld {
         if submitted and openai_api_key.startswith('sk-'):
             with get_openai_callback() as cb:
 
-                model = st.sidebar.selectbox('Select Model:', ['gpt-3.5-turbo', 'gpt-4'])
                 llm = ChatOpenAI(model_name=model, temperature=0.0, openai_api_key=openai_api_key)
 
                 review_prompt_template = PromptTemplate(
