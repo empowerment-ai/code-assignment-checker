@@ -54,14 +54,13 @@ if __name__ == '__main__':
     sample_instruction="""Write a Java Hello World program.   Be sure to name the class HelloWorld.   The program should also include proper summary comments that include your name, course section,  instructor name, and a brief description of your program.  
 
 Rubric: 
-Summary Comments
-    Name : 5 Points
-    Course Section: 5 Points
-    Instructor:  5 Points
-    Description: 5 Points 
-If Logic is correct, student gets 30 points.  But Deduct 2 Points Per Logic Error
-Class name:  If the Class name is correct, student gets 20 points, but Deduct 20 points if its incorrect
-Deduct 2 points per Syntax Error 
+ Has Student Name: 5 points
+ Has Section: 5 points
+ Has Instructor: 5 points
+ Has Description: 10 points
+ Has Correct Class Name: 10 points
+ Has Correct Logic: 10 points
+ No Syntax Errors: 10 points
    """
 
     sample_submission="""
@@ -107,12 +106,12 @@ public class HelloWorldProgram {
                         input_variables=["ai", "instructions", "submission", "sample_output_format"], template=review_template
                         )
                         synopsis_chain = LLMChain(
-                            llm=llm, prompt=review_prompt_template, output_key="review"
+                            llm=llm, prompt=review_prompt_template, output_key="feedback"
                         )
-                        review = synopsis_chain.run({'ai': ai_review_instructions, 'instructions': instructions,'submission': submission })
+                        feedback = synopsis_chain.run({'ai': ai_review_instructions, 'instructions': instructions,'submission': submission })
                         print(cb)
                         st.write("Assignment Feedback:")
-                        st.write(review)
+                        st.write(feedback)
                         st.markdown(f"""
                                     ### Total Cost:
                                     ${cb.total_cost:,.3f}
