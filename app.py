@@ -75,44 +75,47 @@ Deduct 2 points per Syntax Error
  *              It simply prints the message "Hello, World!" to the console.
  */
 
-public class HelloWorld {
+public class HelloWorldProgram {
     public static void main(String[] args) {
         // Print "Hello, World!" to the console
-        System.out.println("Hello, World!");
+        System.out.println("World!");
     }
 }
+"""
 
-    """
+    with tab1:
+        ai_review_instructions =st.text_area("AI Instructions", ai, height=500)
+    with tab2:
+        instructions=st.text_area("Assignment Instructions", sample_instruction, height=500)
+    with tab3:
+        submission = st.text_area("Student Submission:", sample_submission, height=500)
 
+        with st.form('my_form'):
+            if (openai_api_key == None or not openai_api_key.startswith('sk-')):
+                st.warning('Please enter your OpenAI API key!', icon='⚠')
+                st.session_state.disabled = True
+            submitted = st.form_submit_button('Check', disabled=st.session_state.disabled)
+            
+            if submitted and openai_api_key.startswith('sk-'):
+                with get_openai_callback() as cb:
 
+                    with st.spinner('Working on it...'):
 
-    with st.form('my_form'):
+                        llm = ChatOpenAI(model_name=model, temperature=0.0, openai_api_key=openai_api_key)
 
-        with tab1:
-            ai_review_instructions =st.text_area("AI Instructions", ai, height=500)
-        with tab2:
-            instructions=st.text_area("Assignment Instructions", sample_instruction, height=500)
-        with tab3:
-            submission = st.text_area("Student Submission:", sample_submission, height=500)
+                        review_prompt_template = PromptTemplate(
+                        input_variables=["ai", "instructions", "submission", "sample_output_format"], template=review_template
+                        )
+                        synopsis_chain = LLMChain(
+                            llm=llm, prompt=review_prompt_template, output_key="review"
+                        )
+                        review = synopsis_chain.run({'ai': ai_review_instructions, 'instructions': instructions,'submission': submission })
+                        print(cb)
+                        st.write("Assignment Feedback:")
+                        st.write(review)
+                        st.markdown(f"""
+                                    ### Total Cost:
+                                    ${cb.total_cost:,.3f}
+                        """)
 
-        if (openai_api_key == None or not openai_api_key.startswith('sk-')):
-            st.warning('Please enter your OpenAI API key!', icon='⚠')
-            st.session_state.disabled = True
-        submitted = st.form_submit_button('Check', disabled=st.session_state.disabled)
-        
-        if submitted and openai_api_key.startswith('sk-'):
-            with get_openai_callback() as cb:
-
-                llm = ChatOpenAI(model_name=model, temperature=0.0, openai_api_key=openai_api_key)
-
-                review_prompt_template = PromptTemplate(
-                input_variables=["ai", "instructions", "submission", "sample_output_format"], template=review_template
-                )
-                synopsis_chain = LLMChain(
-                    llm=llm, prompt=review_prompt_template, output_key="review"
-                )
-                review = synopsis_chain.run({'ai': ai_review_instructions, 'instructions': instructions,'submission': submission })
-                print(cb)
-                st.write("Assignment Feedback:")
-                st.write(review)
 
