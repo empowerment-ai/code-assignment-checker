@@ -6,7 +6,7 @@ Welcome to this AI-powered tool designed to assist educators in evaluating gener
 The tool parses the student submissions and uses AI to run tests and evaluate the code quality against specified criteria. By integrating LangChain and OpenAI, we can leverage advanced natural language processing to interpret the code's intent and provide detailed feedback.
 
 ## Features
-- **Matching Assignment Requirements:  Evaluate code to confirm if it matched the assignment instructions.
+- **Matching Assignment Requirements**:  Evaluate code to confirm if it matched the assignment instructions.
 - **Syntax Check**: Will attempt to review the code for syntax errors. (Because this is not an actual compiler or linter, syntax checking is not always accurate. Double check the feedback)
 - **Logic Check**: Will attempt to review the code for logic errors. (Watch for hallucinations)
 - **Feedback Generation**: Automatically generate constructive feedback based on the code analysis.
